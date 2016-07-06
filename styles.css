@@ -1,0 +1,43 @@
+body {
+  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+}
+
+header.navbar {
+  box-shadow: 0px 0px 5px 0px #D3D3D3; 
+}
+
+a.navbar-brand {
+  color: black;
+  font-family: Copperplate, "Copperplate Gothic Light", fantasy;
+}
+
+div.product {
+  min-height: 600px;
+  width: 100%;
+  background-size: cover;
+  background-image: url("http://www.nocaptionneeded.com/wp-content/uploads/2013/08/march-on-washington-august-28-1963.jpg");
+}
+
+a.banner {
+  color: black;
+  font-size: 35px;
+}
+
+div.app-store {
+  background-image: url("https://upload.wikimedia.org/wikipedia/commons/1/11/Available_on_the_App_Store_(gray).png");
+  width: 100%s;
+  background-size: cover;
+}
+
+#footer {
+  background-color: #D3D3D3;
+}
+
+img.profile-pic {
+  border-radius: 50%;
+  max-width: 250px;
+}
+
+.thumbnail {
+  border: transparent;
+}
