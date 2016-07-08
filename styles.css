@@ -1,5 +1,5 @@
 body {
-  font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  font-family: 'PT Sans', sans-serif !important;
 }
 
 header.navbar {
@@ -69,8 +69,8 @@ div.eachstack {
 }
 
 div.image-holder {
-  height: 160px;
-  width: 160px;
+  height: 150px;
+  width: 150px;
   margin: auto auto;
   position: relative;
 }
@@ -113,5 +113,14 @@ a.gitlink {
 .video-wrapper {
   width: 100%;
   background-color: black;
+  height:100vh;
+  position: relative;
+}
+
+#video {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
 }
 

@@ -22,9 +22,9 @@
       </div>
       <nav id="bs-navbar" class="collapse navbar-collapse">
         <ul class="nav navbar-nav navbar-right">
-          <li><a href="http://themes.getbootstrap.com">App</a></li>
-          <li><a href="http://expo.getbootstrap.com">Technologies</a></li>
-          <li><a href="http://blog.getbootstrap.com">Team</a></li>
+          <li><a >App</a></li>
+          <li><a >Technologies</a></li>
+          <li><a >Team</a></li>
         </ul>
       </nav>
     </div>
@@ -33,22 +33,20 @@
     <p class="slogan text-center">Relive the moments. Same place. Different Time.</p>
   </div>
   <script>
+    var playing = false;
     $(document).ready(function(){
-      var playing = false;
       if(playing) {
-        $("div.video-wrapper").click(function(){
+        $("div.video-player").click(function(){
+          $("div.video-wrapper").hide();
           $("div.threeJS").show();
           $("div.slogan-wrapper").show();
-          $("div.video-wrapper").hide();
-          playing = false;
         });
+        playing = false;
       } else {
         $("div.threeJS").click(function(){
           $("div.threeJS").hide();
           $("div.slogan-wrapper").hide();
           $("div.video-wrapper").show();
-          $("#video").load();
-          $("#video").play();
         });
         playing = true;
       }
@@ -94,8 +92,8 @@
       var geometry = new THREE.SphereGeometry(150, 32, 16);
       var material = new THREE.MeshBasicMaterial({ map: texture });
       mesh = new THREE.Mesh(geometry, material);
-      mesh.position.x = -450;
-      mesh.position.y = -100;
+      mesh.position.x = -470;
+      mesh.position.y = -150;
       mesh.position.z = 300;
       // mesh.position.x = 350;
       // mesh.position.y = 30;
