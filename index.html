@@ -1,8 +1,14 @@
 <!DOCTYPE html>
 <head>
+  <script src="./three.js"></script>
+  <script src="./projector.js"></script>
+  <script src="./CanvasRenderer.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.5.3/angular.min.js"></script>
+  <link href="http://vjs.zencdn.net/5.10.4/video-js.css" rel="stylesheet">
   <script src="techController.js"></script>
   <script src="teamController.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=PT+Sans" rel="stylesheet">
+  <script src="https://code.jquery.com/jquery-3.0.0.js" integrity="sha256-jrPLZ+8vDxt2FnE1zvZXCkCcebI/C8Dt5xyaQBjxQIo=" crossorigin="anonymous"></script>
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" integrity="sha384-1q8mTJOASx8j1Au+a5WDVnPi2lkFfwwEAa8hDDdjZlpLegxhjVME1fgjWPGmkzs7" crossorigin="anonymous">
   <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.3/css/font-awesome.min.css">
   <link rel="stylesheet" type="text/css" href="styles.css">
@@ -23,71 +29,202 @@
       </nav>
     </div>
   </header>
-  <div class="product">
+  <div class="slogan-wrapper">
+    <p class="slogan text-center">Relive the moments. Same place. Different Time.</p>
   </div>
+  <script>
+    $(document).ready(function(){
+      var playing = false;
+      if(playing) {
+        $("div.video-wrapper").click(function(){
+          $("div.threeJS").show();
+          $("div.slogan-wrapper").show();
+          $("div.video-wrapper").hide();
+          playing = false;
+        });
+      } else {
+        $("div.threeJS").click(function(){
+          $("div.threeJS").hide();
+          $("div.slogan-wrapper").hide();
+          $("div.video-wrapper").show();
+          $("#video").load();
+          $("#video").play();
+        });
+        playing = true;
+      }
+    });
+  </script>
+  <div class="video-wrapper" hidden="true" width=100% height="window.innerHeight">
+    <div class="video-player">
+      <video id="video" height="800px" width="100%" controls="" name="media" autoplay>
+        <source src="img/goldengatefireworks.webm" type="video/webm">
+      </video>
+    </div>
+  </div>
+  <script>
+    var SCREEN_WIDTH = window.innerWidth,
+    SCREEN_HEIGHT = window.innerHeight,
+    mouseX = 0, mouseY = 0,
+    windowHalfX = window.innerWidth / 2,
+    windowHalfY = window.innerHeight / 2,
+    SEPARATION = 200,
+    AMOUNTX = 10,
+    AMOUNTY = 10,
+    camera, scene, renderer, backgroundScene, backgroundCamera;
+    init();
+    animate();
+    function init() {
+      var container, separation = 100, amountX = 50, amountY = 50,
+      particles, particle;
+      container = document.createElement('div');
+      container.setAttribute('class', 'threeJS');
+      document.body.appendChild(container);
+      camera = new THREE.PerspectiveCamera(75, SCREEN_WIDTH / SCREEN_HEIGHT, 1, 10000);
+      camera.position.z = 1000;
+      scene = new THREE.Scene();
+      renderer = new THREE.CanvasRenderer();
+      renderer.setPixelRatio(window.devicePixelRatio);
+      renderer.setSize(SCREEN_WIDTH, SCREEN_HEIGHT);
+      container.appendChild(renderer.domElement);   
+
+      // SPHERE TEXTURE
+      var image = 'img/fireworks3.jpg'
+      var loader = new THREE.TextureLoader();
+      var texture = loader.load(image);
+      var geometry = new THREE.SphereGeometry(150, 32, 16);
+      var material = new THREE.MeshBasicMaterial({ map: texture });
+      mesh = new THREE.Mesh(geometry, material);
+      mesh.position.x = -450;
+      mesh.position.y = -100;
+      mesh.position.z = 300;
+      // mesh.position.x = 350;
+      // mesh.position.y = 30;
+      // mesh.position.z = -300;
+      console.log(mesh.position)
+      scene.add(mesh);
+      
+      // BACKGROUND TEXTURE
+      var texture3 = THREE.ImageUtils.loadTexture('img/goldengatebridge4.jpg');
+      var backgroundMesh = new THREE.Mesh(
+          new THREE.PlaneGeometry(2, 2, 0),
+          new THREE.MeshBasicMaterial({
+              map: texture3
+          }));
+      backgroundMesh.material.depthTest = false;
+      backgroundMesh.material.depthWrite = false;
+
+      backgroundScene = new THREE.Scene();
+      backgroundCamera = new THREE.Camera();
+      backgroundScene.add(backgroundCamera);
+      backgroundScene.add(backgroundMesh);
+      document.addEventListener('mousemove', onDocumentMouseMove, false);
+      document.addEventListener('touchstart', onDocumentTouchStart, false);
+      document.addEventListener('touchmove', onDocumentTouchMove, false);
+      window.addEventListener('resize', onWindowResize, false);
+    }
+    function onWindowResize() {
+      windowHalfX = window.innerWidth / 2;
+      windowHalfY = window.innerHeight / 2;
+      camera.aspect = window.innerWidth / window.innerHeight;
+      camera.updateProjectionMatrix();
+      renderer.setSize(window.innerWidth, window.innerHeight);
+    }
+    function onDocumentMouseMove(event) {
+      mouseX = event.clientX - windowHalfX;
+      mouseY = event.clientY - windowHalfY;
+    }
+    function onDocumentTouchStart(event) {
+      if (event.touches.length > 1) {
+        event.preventDefault();
+        mouseX = event.touches[0].pageX - windowHalfX;
+        mouseY = event.touches[0].pageY - windowHalfY;
+      }
+    }
+    function onDocumentTouchMove(event) {
+      if (event.touches.length == 1) {
+        event.preventDefault();
+        mouseX = event.touches[0].pageX - windowHalfX;
+        mouseY = event.touches[0].pageY - windowHalfY;
+      }
+    }
+    function animate() {
+      requestAnimationFrame(animate);
+      render();
+    }
+    function render() {
+      camera.lookAt(scene.position);
+      // mesh.rotation.x += 0.01;
+      mesh.rotation.y += 0.005;
+      renderer.autoClear = false;
+      renderer.clear();
+      renderer.render(backgroundScene, backgroundCamera);
+      renderer.render(scene, camera);
+    }
+  </script>
   <div class="stores row">
     <div class="app-store"></div>
   </div>
   <div class="tech" id="techlist" ng-app="tech">
-    <div class="center-align">
+    <div class="sectionbanner text-center">
       <a class="banner">Technologies</a>
     </div>
     <div class="stack row" ng-controller='techCtrl' ng-model='stack'>
-      <div class='media col-sm-3' ng-repeat='stack in stacks'>
-        {{stack.name}}
+      <div class='eachstack media col-sm-3' ng-repeat='stack in stacks'>
+        <div class="row">
+          <div class="thumbnail">
+            <div class="image-holder">
+              <img class="stack-pic text-center" src={{stack.pic}} alt="...">
+            </div>
+            <div class="caption">
+              <h5 class="text-center">{{stack.name}}</h5>
+              <h5 class="text-center">{{stack.des}}</h5>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
   <div class="team" id="teamlist" ng-app="team">
-    <div class="center-align">
+    <div class="sectionbanner text-center">
       <a class="banner">Team</a>
     </div>
-    <div class="row">
-      <div class="col-sm-4">
-        <div class="thumbnail">
-          <img class="profile-pic" src="http://bit.ly/29oxW6P" alt="...">
-          <div class="caption">
-            <h3 class="text-center">Kamal Mango</h3>
-            <p class="text-center"><i class="fa fa-github" aria-hidden="true"></i>kamalmango</p>
-          </div>
-        </div>
-      </div>
-            <i class="fa fa-camera-retro fa-lg"></i>
-      <div class="col-sm-4">
-        <div class="thumbnail">
-          <img class="profile-pic" src="http://bit.ly/29xvfRw" alt="...">
-          <div class="caption">
-            <h3 class="text-center">Nikita Lebedev</h3>
-            <p class="text-center"><i class="fa fa-github" aria-hidden="true"></i>nlebedev</p>
-          </div>
-        </div>
-      </div>
-      <div class="col-sm-4">
-        <div class="thumbnail">
-          <img class="profile-pic" src="http://bit.ly/29rjOJ9" alt="...">
-          <div class="caption">
-            <h3 class="text-center">Chris Choi</h3>
-            <p class="text-center">cmhchoi</p>
-          </div>
-        </div>
-      </div>
-    </div>
-
-
-
-    <!-- <div class="member row" ng-controller='teamCtrl' ng-model='member'>
-      <div class='media col-md-6' ng-repeat='member in members'>
-        {{member.name}}
-      </div>
-      <div class="col-sm-4">
-        <img class='profile-pic' src="http://bit.ly/29oxW6P">
-        <a class='git'>kamalmango</a>
-      </div>
-    </div> -->
-  </div>
-  <!-- <div id="footer">
     <div class="container">
-      bunch of stuff
+      <div class="row">
+        <div class="col-sm-4">
+          <div class="thumbnail grey">
+            <img class="profile-pic" src="http://bit.ly/29oxW6P">
+            <div class="caption">
+              <h5 class="text-center">KAMAL MANGO</h5>
+              <a class='gitlink' href="https://www.github.com/kamalmango">
+                <p class="gitlink text-center"><i class="fa fa-github" aria-hidden="true"></i> kamalmango</p>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="thumbnail grey">
+            <img class="profile-pic" src="http://bit.ly/29xvfRw">
+            <div class="caption">
+              <h5 class="text-center">NIKITA LEBEDEV</h5>
+              <a class='gitlink' href="https://www.github.com/nlebedev">
+                <p class="gitlink text-center"><i class="fa fa-github" aria-hidden="true"></i> nlebedev</p>
+              </a>
+            </div>
+          </div>
+        </div>
+        <div class="col-sm-4">
+          <div class="thumbnail grey">
+            <img class="profile-pic" src="http://bit.ly/29rjOJ9">
+            <div class="caption">
+              <h5 class="text-center">CHRISTOPHER CHOI</h5>
+              <a class='gitlink' href="https://www.github.com/cmhchoi">
+                <p class="gitlink text-center"><i class="fa fa-github" aria-hidden="true"></i> cmhchoi</p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
     </div>
-  </div> -->
+  </div>
+  
 </body>

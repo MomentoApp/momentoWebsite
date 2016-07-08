@@ -4,6 +4,7 @@ body {
 
 header.navbar {
   box-shadow: 0px 0px 5px 0px #D3D3D3; 
+  margin-bottom: 0px;
 }
 
 a.navbar-brand {
@@ -35,9 +36,82 @@ div.app-store {
 
 img.profile-pic {
   border-radius: 50%;
-  max-width: 250px;
+  max-width: 175px;
 }
 
 .thumbnail {
   border: transparent;
 }
+
+.gitlink {
+  font-size: 15px;
+}
+
+h5 {
+  font-size: 16px;
+}
+
+i.fa-github {
+  font-size: large;
+}
+
+img.stack-pic {
+  max-width: 175px;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+div.eachstack {
+  margin-top: 0px;
+  min-height: 270px;
+}
+
+div.image-holder {
+  height: 160px;
+  width: 160px;
+  margin: auto auto;
+  position: relative;
+}
+
+div.team {
+  background-color: #f9f9f9;
+  font-family: "Myriad Set Pro","Helvetica Neue","Helvetica","Arial",sans-serif;
+}
+
+div.thumbnail.grey {
+  background-color: #f9f9f9;
+}
+
+a.gitlink {
+  color: black;
+}
+
+.sectionbanner {
+  padding: 20px 0;
+}
+
+.threeJS {
+  
+}
+
+.slogan-wrapper {
+  position: absolute;
+  background: transparent;
+  width: 100%;
+}
+
+.slogan {
+  margin-top: 30px;
+  font-size: 50px;
+  font-family: 'PT Sans', sans-serif;
+  color: #4A4A4A;
+  text-shadow: 1px 0px white;
+}
+
+.video-wrapper {
+  width: 100%;
+  background-color: black;
+}
+
